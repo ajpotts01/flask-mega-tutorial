@@ -25,6 +25,7 @@ def get_posts() -> list[dict]:
 # endregion Helper methods
 
 
+# region Endpoints
 @app.route("/")
 @app.route("/index")
 def index():
@@ -32,3 +33,6 @@ def index():
     view: str = render_template(template_name_or_list="index.html", **context)
 
     return view
+
+
+# endregion Endpoints
