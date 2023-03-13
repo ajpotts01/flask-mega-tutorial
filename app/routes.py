@@ -1,6 +1,8 @@
 from flask import render_template, flash, redirect, url_for
+from flask_login import current_user, login_user, logout_user
 from app import app
 from app.forms import LoginForm
+from app.models import User
 
 
 # region Helper methods
@@ -44,13 +46,20 @@ def index() -> str:
 
 @app.route("/login", methods=["GET", "POST"])
 def login() -> str:
+    if current_user.is_authenticated:
+        return redirect(url_for("index"))
+
     form: LoginForm = LoginForm()
     context: dict = get_context_login(form=form)
 
     if form.validate_on_submit():
-        flash(
-            f"Login requested for user {form.username.data}, remember_me={form.remember_me.data}"
-        )
+        user: User = User.query.filter_by(username=form.username.data).first()
+
+        if user is None or not User.check_password(password=form.password.data):
+            flash(f"Invalid username or password.")
+            return redirect(url_for("login"))
+
+        login_user(user, remember=form.remember_me.data)
         return redirect(url_for("index"))
 
     view: str = render_template(template_name_or_list="login.html", **context)
