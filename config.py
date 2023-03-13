@@ -1,6 +1,8 @@
 import os
 
-basedir = os.path.abspath(os.path.dirname(__file__))  # ?
+basedir = os.path.abspath(
+    os.path.dirname(__file__)
+)  # How come this is a top-level statement?
 
 
 class Config(object):
