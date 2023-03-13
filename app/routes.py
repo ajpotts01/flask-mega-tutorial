@@ -66,5 +66,9 @@ def login() -> str:
 
     return view
 
+@app.route("/logout")
+def logout():
+    logout_user()
+    return redirect(url_for("index"))
 
 # endregion Endpoints
